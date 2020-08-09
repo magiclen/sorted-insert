@@ -3,7 +3,7 @@ Sorted Insert
 
 [![Build Status](https://travis-ci.org/magiclen/sorted-insert.svg?branch=master)](https://travis-ci.org/magiclen/sorted-insert)
 
-This crate provides traits to insert elements to a sorted collection and remain the order.
+This crate provides traits to insert elements to a sorted collection and keep the order.
 
 ## Examples
 

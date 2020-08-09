@@ -1,13 +1,13 @@
 [package]
 name = "sorted-insert"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2018"
 repository = "https://github.com/magiclen/sorted-insert"
 homepage = "https://magiclen.org/sorted-insert"
 keywords = ["sort", "insert", "vec", "array", "insertion"]
 categories = ["no-std", "algorithms"]
-description = "This crate provides traits to insert elements to a sorted collection and remain the order."
+description = "This crate provides traits to insert elements to a sorted collection and keep the order."
 readme = "README.md"
 license = "MIT"
 include = ["src/**/*", "Cargo.toml", "README.md", "LICENSE"]

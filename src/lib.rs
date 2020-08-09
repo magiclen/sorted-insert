@@ -1,7 +1,7 @@
 /*!
 # Sorted Insert
 
-This crate provides traits to insert elements to a sorted collection and remain the order.
+This crate provides traits to insert elements to a sorted collection and keep the order.
 
 ## Examples
 
