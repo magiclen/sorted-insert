@@ -31,6 +31,21 @@ v.sorted_insert_desc_binary(2);
 assert_eq!([5, 2, 1], v.as_slice());
 ```
 
+```rust
+extern crate sorted_insert;
+
+use sorted_insert::SortedInsertByKey;
+
+#[derive(Debug, Copy, Clone, Eq, PartialEq)]
+struct A(i32, i32);
+
+let mut v = vec![A(1, 10), A(2, 20)];
+
+v.sorted_insert_asc_by_key(A(1, 15), |e| &e.1);
+
+assert_eq!([A(1, 10), A(1, 15), A(2, 20)], v.as_slice());
+```
+
 ## No Std
 
 Disable the default features to compile this crate without std.

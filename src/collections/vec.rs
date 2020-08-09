@@ -1,65 +1,43 @@
+use core::cmp::Ordering;
+
 use alloc::vec::Vec;
 
-use crate::{SortedInsert, SortedInsertBinary};
+use crate::{
+    SortedInsert, SortedInsertBasic, SortedInsertBinary, SortedInsertBinaryBy,
+    SortedInsertBinaryByKey, SortedInsertBy, SortedInsertByKey,
+};
 
-impl<T: Ord> SortedInsert<T> for Vec<T> {
+impl<T> SortedInsertBasic<T> for Vec<T> {
     #[inline]
-    fn sorted_insert_asc(&mut self, element: T) -> usize {
-        match self.iter().rposition(|e| e <= &element) {
-            Some(mut i) => {
-                i += 1;
-
-                self.insert(i, element);
-
-                i
-            }
-            None => {
-                self.insert(0, element);
-
-                0
-            }
-        }
+    fn insert_element(&mut self, index: usize, element: T) {
+        self.insert(index, element);
     }
+}
 
+impl<T> SortedInsertBy<T> for Vec<T> {
     #[inline]
-    fn sorted_insert_desc(&mut self, element: T) -> usize {
-        match self.iter().rposition(|e| e >= &element) {
-            Some(mut i) => {
-                i += 1;
-
-                self.insert(i, element);
-
-                i
-            }
-            None => {
-                self.insert(0, element);
-
-                0
-            }
+    fn get_sorted_insert_index_by<F: FnMut(&T) -> bool>(&self, f: F) -> usize {
+        match self.iter().rposition(f) {
+            Some(i) => i + 1,
+            None => 0,
         }
     }
 }
 
-impl<T: Ord> SortedInsertBinary<T> for Vec<T> {
+impl<T> SortedInsertByKey<T> for Vec<T> {}
+
+impl<T: Ord> SortedInsert<T> for Vec<T> {}
+
+impl<T> SortedInsertBinaryBy<T> for Vec<T> {
     #[inline]
-    fn sorted_insert_asc_binary(&mut self, element: T) -> usize {
-        let i = match self.binary_search(&element) {
-            Ok(i) | Err(i) => i,
-        };
-
-        self.insert(i, element);
-
-        i
-    }
-
-    #[inline]
-    fn sorted_insert_desc_binary(&mut self, element: T) -> usize {
-        let i = match self.binary_search_by(|e| element.cmp(e)) {
-            Ok(i) | Err(i) => i,
-        };
-
-        self.insert(i, element);
-
-        i
+    fn get_sorted_insert_index_binary_by<F: FnMut(&T) -> Ordering>(&mut self, f: F) -> usize {
+        match self.binary_search_by(f) {
+            Ok(i) => i + 1,
+            Err(i) => i,
+        }
     }
 }
+
+impl<T> SortedInsertBinaryByKey<T> for Vec<T> {}
+
+impl<T: Ord> SortedInsertBinary<T> for Vec<T> {}

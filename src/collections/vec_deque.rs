@@ -1,69 +1,47 @@
+#[cfg(feature = "nightly")]
+use core::cmp::Ordering;
+
 use std::collections::VecDeque;
 
-use crate::SortedInsert;
+use crate::{SortedInsert, SortedInsertBasic, SortedInsertBy, SortedInsertByKey};
 
 #[cfg(feature = "nightly")]
-use crate::SortedInsertBinary;
+use crate::{SortedInsertBinary, SortedInsertBinaryBy, SortedInsertBinaryByKey};
 
-impl<T: Ord> SortedInsert<T> for VecDeque<T> {
+impl<T> SortedInsertBasic<T> for VecDeque<T> {
     #[inline]
-    fn sorted_insert_asc(&mut self, element: T) -> usize {
-        match self.iter().rposition(|e| e <= &element) {
-            Some(mut i) => {
-                i += 1;
+    fn insert_element(&mut self, index: usize, element: T) {
+        self.insert(index, element);
+    }
+}
 
-                self.insert(i, element);
-
-                i
-            }
-            None => {
-                self.insert(0, element);
-
-                0
-            }
+impl<T> SortedInsertBy<T> for VecDeque<T> {
+    #[inline]
+    fn get_sorted_insert_index_by<F: FnMut(&T) -> bool>(&self, f: F) -> usize {
+        match self.iter().rposition(f) {
+            Some(i) => i + 1,
+            None => 0,
         }
     }
+}
 
+impl<T> SortedInsertByKey<T> for VecDeque<T> {}
+
+impl<T: Ord> SortedInsert<T> for VecDeque<T> {}
+
+#[cfg(feature = "nightly")]
+impl<T> SortedInsertBinaryBy<T> for VecDeque<T> {
     #[inline]
-    fn sorted_insert_desc(&mut self, element: T) -> usize {
-        match self.iter().rposition(|e| e >= &element) {
-            Some(mut i) => {
-                i += 1;
-
-                self.insert(i, element);
-
-                i
-            }
-            None => {
-                self.insert(0, element);
-
-                0
-            }
+    fn get_sorted_insert_index_binary_by<F: FnMut(&T) -> Ordering>(&mut self, f: F) -> usize {
+        match self.make_contiguous().binary_search_by(f) {
+            Ok(i) => i + 1,
+            Err(i) => i,
         }
     }
 }
 
 #[cfg(feature = "nightly")]
-impl<T: Ord> SortedInsertBinary<T> for VecDeque<T> {
-    #[inline]
-    fn sorted_insert_asc_binary(&mut self, element: T) -> usize {
-        let i = match self.make_contiguous().binary_search(&element) {
-            Ok(i) | Err(i) => i,
-        };
+impl<T> SortedInsertBinaryByKey<T> for VecDeque<T> {}
 
-        self.insert(i, element);
-
-        i
-    }
-
-    #[inline]
-    fn sorted_insert_desc_binary(&mut self, element: T) -> usize {
-        let i = match self.make_contiguous().binary_search_by(|e| element.cmp(e)) {
-            Ok(i) | Err(i) => i,
-        };
-
-        self.insert(i, element);
-
-        i
-    }
-}
+#[cfg(feature = "nightly")]
+impl<T: Ord> SortedInsertBinary<T> for VecDeque<T> {}
