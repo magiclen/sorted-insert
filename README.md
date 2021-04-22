@@ -1,7 +1,7 @@
 Sorted Insert
 ====================
 
-[![Build Status](https://travis-ci.org/magiclen/sorted-insert.svg?branch=master)](https://travis-ci.org/magiclen/sorted-insert)
+[![CI](https://github.com/magiclen/sorted-insert/actions/workflows/ci.yml/badge.svg)](https://github.com/magiclen/sorted-insert/actions/workflows/ci.yml)
 
 This crate provides traits to insert elements to a sorted collection and keep the order.
 

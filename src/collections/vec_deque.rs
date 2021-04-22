@@ -1,11 +1,8 @@
-#[cfg(feature = "nightly")]
 use core::cmp::Ordering;
 
 use std::collections::VecDeque;
 
 use crate::{SortedInsert, SortedInsertBasic, SortedInsertBy, SortedInsertByKey};
-
-#[cfg(feature = "nightly")]
 use crate::{SortedInsertBinary, SortedInsertBinaryBy, SortedInsertBinaryByKey};
 
 impl<T> SortedInsertBasic<T> for VecDeque<T> {
@@ -29,7 +26,6 @@ impl<T> SortedInsertByKey<T> for VecDeque<T> {}
 
 impl<T: Ord> SortedInsert<T> for VecDeque<T> {}
 
-#[cfg(feature = "nightly")]
 impl<T> SortedInsertBinaryBy<T> for VecDeque<T> {
     #[inline]
     fn get_sorted_insert_index_binary_by<F: FnMut(&T) -> Ordering>(&mut self, f: F) -> usize {
@@ -40,8 +36,6 @@ impl<T> SortedInsertBinaryBy<T> for VecDeque<T> {
     }
 }
 
-#[cfg(feature = "nightly")]
 impl<T> SortedInsertBinaryByKey<T> for VecDeque<T> {}
 
-#[cfg(feature = "nightly")]
 impl<T: Ord> SortedInsertBinary<T> for VecDeque<T> {}

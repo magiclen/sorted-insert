@@ -1,6 +1,6 @@
 [package]
 name = "sorted-insert"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2018"
 repository = "https://github.com/magiclen/sorted-insert"
@@ -12,13 +12,8 @@ readme = "README.md"
 license = "MIT"
 include = ["src/**/*", "Cargo.toml", "README.md", "LICENSE"]
 
-[badges.travis-ci]
-repository = "magiclen/sorted-insert"
-branch = "master"
-
 [dependencies]
 
 [features]
 default = ["std"]
 std = []
-nightly = []

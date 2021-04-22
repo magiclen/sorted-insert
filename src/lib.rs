@@ -56,7 +56,6 @@ default-features = false
 */
 
 #![cfg_attr(not(feature = "std"), no_std)]
-#![cfg_attr(feature = "nightly", feature(deque_make_contiguous))]
 
 extern crate alloc;
 
