@@ -6,8 +6,6 @@ This crate provides traits to insert elements to a sorted collection and keep th
 ## Examples
 
 ```rust
-extern crate sorted_insert;
-
 use sorted_insert::SortedInsert;
 
 let mut v = vec![1, 5];
@@ -18,8 +16,6 @@ assert_eq!([1, 2, 5], v.as_slice());
 ```
 
 ```rust
-extern crate sorted_insert;
-
 use sorted_insert::SortedInsertBinary;
 
 let mut v = vec![5, 1];
@@ -30,8 +26,6 @@ assert_eq!([5, 2, 1], v.as_slice());
 ```
 
 ```rust
-extern crate sorted_insert;
-
 use sorted_insert::SortedInsertByKey;
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
@@ -92,7 +86,7 @@ pub trait SortedInsertByKey<T>: SortedInsertBy<T> {
         element: T,
         mut f: F,
     ) -> usize {
-        self.sorted_insert_by(element, |e, element| f(e) <= f(&element))
+        self.sorted_insert_by(element, |e, element| f(e) <= f(element))
     }
 
     /// Insert elements to this sorted collection in descending order by a specific key and return the inserted index. Use linear search to find the index where a matching element could be inserted.
@@ -102,7 +96,7 @@ pub trait SortedInsertByKey<T>: SortedInsertBy<T> {
         element: T,
         mut f: F,
     ) -> usize {
-        self.sorted_insert_by(element, |e, element| f(e) >= f(&element))
+        self.sorted_insert_by(element, |e, element| f(e) >= f(element))
     }
 }
 

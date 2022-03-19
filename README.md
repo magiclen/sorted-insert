@@ -8,8 +8,6 @@ This crate provides traits to insert elements to a sorted collection and keep th
 ## Examples
 
 ```rust
-extern crate sorted_insert;
-
 use sorted_insert::SortedInsert;
 
 let mut v = vec![1, 5];
@@ -20,8 +18,6 @@ assert_eq!([1, 2, 5], v.as_slice());
 ```
 
 ```rust
-extern crate sorted_insert;
-
 use sorted_insert::SortedInsertBinary;
 
 let mut v = vec![5, 1];
@@ -32,8 +28,6 @@ assert_eq!([5, 2, 1], v.as_slice());
 ```
 
 ```rust
-extern crate sorted_insert;
-
 use sorted_insert::SortedInsertByKey;
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]

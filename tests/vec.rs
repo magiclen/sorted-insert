@@ -1,5 +1,3 @@
-extern crate sorted_insert;
-
 use sorted_insert::*;
 
 #[test]
