@@ -1,6 +1,5 @@
-use core::cmp::Ordering;
-
 use alloc::vec::Vec;
+use core::cmp::Ordering;
 
 use crate::{
     SortedInsert, SortedInsertBasic, SortedInsertBinary, SortedInsertBinaryBy,

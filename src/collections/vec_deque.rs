@@ -1,9 +1,10 @@
 use core::cmp::Ordering;
-
 use std::collections::VecDeque;
 
-use crate::{SortedInsert, SortedInsertBasic, SortedInsertBy, SortedInsertByKey};
-use crate::{SortedInsertBinary, SortedInsertBinaryBy, SortedInsertBinaryByKey};
+use crate::{
+    SortedInsert, SortedInsertBasic, SortedInsertBinary, SortedInsertBinaryBy,
+    SortedInsertBinaryByKey, SortedInsertBy, SortedInsertByKey,
+};
 
 impl<T> SortedInsertBasic<T> for VecDeque<T> {
     #[inline]
