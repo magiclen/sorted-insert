@@ -9,7 +9,6 @@ homepage = "https://magiclen.org/sorted-insert"
 keywords = ["sort", "insert", "vec", "array", "insertion"]
 categories = ["no-std", "algorithms"]
 description = "This crate provides traits to insert elements to a sorted collection and keep the order."
-readme = "README.md"
 license = "MIT"
 include = ["src/**/*", "Cargo.toml", "README.md", "LICENSE"]
 
