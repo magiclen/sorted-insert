@@ -11,6 +11,10 @@ pub trait SortedInsertArcMutexBasic<T> {
 
 pub trait SortedInsertArcMutexBy<T>: SortedInsertArcMutexBasic<T> {
     /// Insert elements to this sorted collection by a specific comparator and return the inserted index. Use linear search to find the index where a matching element could be inserted.
+    ///
+    /// ## Safety
+    ///
+    /// This function will panic if the element is locked.
     #[inline]
     fn sorted_insert_by<F: FnMut(&Arc<Mutex<T>>, &T) -> bool>(
         &mut self,
@@ -34,42 +38,69 @@ pub trait SortedInsertArcMutexBy<T>: SortedInsertArcMutexBasic<T> {
 
 pub trait SortedInsertArcMutexByKey<T>: SortedInsertArcMutexBy<T> {
     /// Insert elements to this sorted collection in ascending order by a specific key and return the inserted index. Use linear search to find the index where a matching element could be inserted.
+    ///
+    /// ## Safety
+    ///
+    /// This function will panic if the element is locked.
     #[inline]
     fn sorted_insert_asc_by_key<A: Ord, F: FnMut(&T) -> &A>(
         &mut self,
         element: Arc<Mutex<T>>,
         mut f: F,
     ) -> usize {
-        self.sorted_insert_by(element, |e, element| {
-            let e_guard = e.lock().unwrap();
+        self.sorted_insert_by(element.clone(), |e, element_t| {
+            // if the element is the same as the one being inserted, we can skip the comparison, in order to avoid deadlocks
+            if Arc::ptr_eq(e, &element) {
+                true
+            } else {
+                let e_guard = e.lock().unwrap();
 
-            f(&*e_guard) <= f(element)
+                f(&*e_guard) <= f(element_t)
+            }
         })
     }
 
     /// Insert elements to this sorted collection in descending order by a specific key and return the inserted index. Use linear search to find the index where a matching element could be inserted.
+    ///
+    /// ## Safety
+    ///
+    /// This function will panic if the element is locked.
     #[inline]
     fn sorted_insert_desc_by_key<A: Ord, F: FnMut(&T) -> &A>(
         &mut self,
         element: Arc<Mutex<T>>,
         mut f: F,
     ) -> usize {
-        self.sorted_insert_by(element, |e, element| {
-            let e_guard = e.lock().unwrap();
+        self.sorted_insert_by(element.clone(), |e, element_t| {
+            // if the element is the same as the one being inserted, we can skip the comparison, in order to avoid deadlocks
+            if Arc::ptr_eq(e, &element) {
+                true
+            } else {
+                let e_guard = e.lock().unwrap();
 
-            f(&*e_guard) >= f(element)
+                f(&*e_guard) >= f(element_t)
+            }
         })
     }
 }
 
 pub trait SortedInsertArcMutex<T: Ord>: SortedInsertArcMutexByKey<T> {
     /// Insert elements to this sorted collection in ascending order and return the inserted index. Use linear search to find the index where a matching element could be inserted.
+    ///
+    /// ## Safety
+    ///
+    /// This function will panic if the element is locked.
     #[inline]
     fn sorted_insert_asc(&mut self, element: Arc<Mutex<T>>) -> usize {
         self.sorted_insert_asc_by_key(element, |element| element)
     }
 
     /// Insert elements to this sorted collection in descending order and return the inserted index. Use linear search to find the index where a matching element could be inserted.
+    ///
+    /// ## Safety
+    ///
+    /// This function will panic if the element is locked.
+    #[inline]
     fn sorted_insert_desc(&mut self, element: Arc<Mutex<T>>) -> usize {
         self.sorted_insert_desc_by_key(element, |element| element)
     }
@@ -77,6 +108,10 @@ pub trait SortedInsertArcMutex<T: Ord>: SortedInsertArcMutexByKey<T> {
 
 pub trait SortedInsertBinaryArcMutexBy<T>: SortedInsertArcMutexBy<T> {
     /// Insert elements to this sorted collection by a specific comparator and return the inserted index. Use binary search to find the index where a matching element could be inserted.
+    ///
+    /// ## Safety
+    ///
+    /// This function will panic if the element is locked.
     fn sorted_insert_binary_by<F: FnMut(&Arc<Mutex<T>>, &T) -> Ordering>(
         &mut self,
         element: Arc<Mutex<T>>,
@@ -102,42 +137,68 @@ pub trait SortedInsertBinaryArcMutexBy<T>: SortedInsertArcMutexBy<T> {
 
 pub trait SortedInsertBinaryArcMutexByKey<T>: SortedInsertBinaryArcMutexBy<T> {
     /// Insert elements to this sorted collection in ascending order by a specific key and return the inserted index. Use binary search to find the index where a matching element could be inserted.
+    ///
+    /// ## Safety
+    ///
+    /// This function will panic if the element is locked.
     #[inline]
     fn sorted_insert_binary_asc_by_key<A: Ord, F: FnMut(&T) -> &A>(
         &mut self,
         element: Arc<Mutex<T>>,
         mut f: F,
     ) -> usize {
-        self.sorted_insert_binary_by(element, |e, element| {
-            let e_guard = e.lock().unwrap();
+        self.sorted_insert_binary_by(element.clone(), |e, element_t| {
+            // if the element is the same as the one being inserted, we can skip the comparison, in order to avoid deadlocks
+            if Arc::ptr_eq(e, &element) {
+                Ordering::Equal
+            } else {
+                let e_guard = e.lock().unwrap();
 
-            f(&*e_guard).cmp(f(element))
+                f(&*e_guard).cmp(f(element_t))
+            }
         })
     }
 
     /// Insert elements to this sorted collection in descending order by a specific key and return the inserted index. Use binary search to find the index where a matching element could be inserted.
+    ///
+    /// ## Safety
+    ///
+    /// This function will panic if the element is locked.
     #[inline]
     fn sorted_insert_binary_desc_by_key<A: Ord, F: FnMut(&T) -> &A>(
         &mut self,
         element: Arc<Mutex<T>>,
         mut f: F,
     ) -> usize {
-        self.sorted_insert_binary_by(element, |e, element| {
-            let e_guard = e.lock().unwrap();
+        self.sorted_insert_binary_by(element.clone(), |e, element_t| {
+            // if the element is the same as the one being inserted, we can skip the comparison, in order to avoid deadlocks
+            if Arc::ptr_eq(e, &element) {
+                Ordering::Equal
+            } else {
+                let e_guard = e.lock().unwrap();
 
-            f(element).cmp(f(&*e_guard))
+                f(element_t).cmp(f(&*e_guard))
+            }
         })
     }
 }
 
 pub trait SortedInsertBinaryArcMutex<T: Ord>: SortedInsertBinaryArcMutexByKey<T> {
     /// Insert elements to this sorted collection in ascending order and return the inserted index. Use binary search to find the index where a matching element could be inserted.
+    ///
+    /// ## Safety
+    ///
+    /// This function will panic if the element is locked.
     #[inline]
     fn sorted_insert_asc_binary(&mut self, element: Arc<Mutex<T>>) -> usize {
         self.sorted_insert_binary_asc_by_key(element, |element| element)
     }
 
     /// Insert elements to this sorted collection in descending order and return the inserted index. Use binary search to find the index where a matching element could be inserted.
+    ///
+    /// ## Safety
+    ///
+    /// This function will panic if the element is locked.
     #[inline]
     fn sorted_insert_desc_binary(&mut self, element: Arc<Mutex<T>>) -> usize {
         self.sorted_insert_binary_desc_by_key(element, |element| element)
