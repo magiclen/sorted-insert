@@ -58,10 +58,15 @@ mod collections;
 #[cfg(feature = "std")]
 mod arc_mutex;
 
+#[cfg(feature = "std")]
+mod arc_rw_lock;
+
 use core::cmp::Ordering;
 
 #[cfg(feature = "std")]
 pub use arc_mutex::*;
+#[cfg(feature = "std")]
+pub use arc_rw_lock::*;
 
 #[doc(hidden)]
 pub trait SortedInsertBasic<T> {

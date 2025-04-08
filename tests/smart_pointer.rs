@@ -3,7 +3,7 @@
 use std::{
     cell::RefCell,
     rc::Rc,
-    sync::{Arc, Mutex},
+    sync::{Arc, Mutex, RwLock},
 };
 
 use sorted_insert::*;
@@ -98,4 +98,27 @@ fn arc_mutex() {
 
     assert_eq!(0, v.sorted_insert_desc_binary(Arc::new(Mutex::new(1))));
     assert_eq!(vec![1], v.as_slice().iter().map(|e| *e.lock().unwrap()).collect::<Vec<isize>>());
+}
+
+#[test]
+fn arc_rw_lock() {
+    let mut v: Vec<Arc<RwLock<isize>>> = Vec::new();
+
+    assert_eq!(0, v.sorted_insert_asc(Arc::new(RwLock::new(1))));
+    assert_eq!(vec![1], v.as_slice().iter().map(|e| *e.read().unwrap()).collect::<Vec<isize>>());
+
+    let mut v: Vec<Arc<RwLock<isize>>> = Vec::new();
+
+    assert_eq!(0, v.sorted_insert_asc_binary(Arc::new(RwLock::new(1))));
+    assert_eq!(vec![1], v.as_slice().iter().map(|e| *e.read().unwrap()).collect::<Vec<isize>>());
+
+    let mut v: Vec<Arc<RwLock<isize>>> = Vec::new();
+
+    assert_eq!(0, v.sorted_insert_desc(Arc::new(RwLock::new(1))));
+    assert_eq!(vec![1], v.as_slice().iter().map(|e| *e.read().unwrap()).collect::<Vec<isize>>());
+
+    let mut v: Vec<Arc<RwLock<isize>>> = Vec::new();
+
+    assert_eq!(0, v.sorted_insert_desc_binary(Arc::new(RwLock::new(1))));
+    assert_eq!(vec![1], v.as_slice().iter().map(|e| *e.read().unwrap()).collect::<Vec<isize>>());
 }
